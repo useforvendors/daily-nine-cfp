@@ -205,9 +205,10 @@ function renderGrid(essays) {
 
    essays.forEach((essay, index) => {
        const box = document.createElement('a');
-       // Use archive.is for clean reader view
-       box.href = `https://archive.is/${essay.url}`;
-       box.target = '_blank';
+       // Link to internal clean-reader page
+box.href = `/read?url=${encodeURIComponent(essay.url)}`;
+box.target = '_self';
+
        box.className = 'essay-box';
        box.innerHTML = `
            <div class="enso-icon">${ensoSVG(index)}</div>
