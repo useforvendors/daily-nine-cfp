@@ -204,19 +204,20 @@ function renderGrid(essays) {
 
   essays.forEach((essay, index) => {
     const box = document.createElement('a');
-    // Link to internal clean-reader page
-    box.href = `/read?url=${encodeURIComponent(essay.url)}`;
-    box.target = '_self';
+
+    // Direct link to the original article (no reader mode)
+    box.href = essay.url;
+    box.target = "_blank";  // or "_self" if you prefer same tab
+
     box.className = 'essay-box';
     box.innerHTML = `
       <div class="enso-icon">${ensoSVG(index)}</div>
       <div class="essay-title">${essay.title}</div>
     `;
+
     grid.appendChild(box);
   });
 }
-
-
 
 // Fetch real essays on page load
 loadEssays();
