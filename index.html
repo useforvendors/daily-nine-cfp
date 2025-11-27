@@ -199,24 +199,23 @@ async function loadEssays() {
 }
 
 function renderGrid(essays) {
-   const grid = document.getElementById('grid');
-   grid.innerHTML = '';
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
 
-
-   essays.forEach((essay, index) => {
-       const box = document.createElement('a');
-       // Link to internal clean-reader page
-box.href = `/read?url=${encodeURIComponent(essay.url)}`;
-box.target = '_self';
-
-       box.className = 'essay-box';
-       box.innerHTML = `
-           <div class="enso-icon">${ensoSVG(index)}</div>
-           <div class="essay-title">${essay.title}</div>
-       `;
-       grid.appendChild(box);
-   });
+  essays.forEach((essay, index) => {
+    const box = document.createElement('a');
+    // Link to internal clean-reader page
+    box.href = `/read?url=${encodeURIComponent(essay.url)}`;
+    box.target = '_self';
+    box.className = 'essay-box';
+    box.innerHTML = `
+      <div class="enso-icon">${ensoSVG(index)}</div>
+      <div class="essay-title">${essay.title}</div>
+    `;
+    grid.appendChild(box);
+  });
 }
+
 
 
 // Fetch real essays on page load
