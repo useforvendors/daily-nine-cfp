@@ -25,7 +25,7 @@ async function fetchArticles() {
   const FEEDS = [
     'https://aeon.co/feed.rss',
     'https://www.theparisreview.org/blog/feed/',
-    'https://nautil.us/feed/',
+    'https://thedispatch.com/',
     'https://lithub.com/category/craftandcriticism/craft-and-advice/feed/',
     'https://www.lrb.co.uk/feeds/lrb'
   ];

@@ -204,7 +204,8 @@ function renderGrid(essays) {
 
     essays.forEach((essay, index) => {
         const box = document.createElement('a');
-        box.href = essay.url;
+        // Use archive.is for clean reader view
+        box.href = `https://archive.is/${essay.url}`;
         box.target = '_blank';
         box.className = 'essay-box';
         box.innerHTML = `
