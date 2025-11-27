@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reading…</title>
+
+<style>
+    body {
+        font-family: "Palatino", serif;
+        background: #f4f1eb;
+        padding: 40px 20px;
+        max-width: 800px;
+        margin: auto;
+        line-height: 1.7;
+        color: #3b372f;
+    }
+    #title {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+    #content {
+        font-size: 1.05rem;
+        white-space: pre-wrap;
+    }
+</style>
+</head>
+
+<body>
+    <div id="title">Loading…</div>
+    <div id="content">Fetching article…</div>
+
+<script>
+// Get ?url=... from the address bar
+const params = new URLSearchParams(location.search);
+const url = params.get("url");
+
+async function loadArticle() {
+    if (!url) {
+        document.getElementById("title").innerText = "Invalid article URL";
+        return;
+    }
+
+    try {
+        const res = await fetch(`/api/read-article?url=${encodeURIComponent(url)}`);
+        const data = await res.json();
+
+        document.title = data.title || "Read";
+        document.getElementById("title").innerText = data.title || "(untitled)";
+        document.getElementById("content").innerHTML = data.content || "Unable to display article.";
+    } catch (err) {
+        document.getElementById("title").innerText = "Error loading article";
+        document.getElementById("content").innerText = err.toString();
+    }
+}
+
+loadArticle();
+</script>
+</body>
+</html>
