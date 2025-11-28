@@ -25,7 +25,7 @@ async function fetchArticles() {
   const FEEDS = [
     'https://aeon.co/feed.rss',
     'https://www.theparisreview.org/blog/feed/',
-    'https://thedispatch.com/',
+    'https://thedispatch.com/feed/',
     'https://lithub.com/category/craftandcriticism/craft-and-advice/feed/',
     'https://www.lrb.co.uk/feeds/lrb'
   ];
@@ -50,37 +50,31 @@ async function fetchArticles() {
       ...article,
       score: scoreArticle(article)
     }))
-    .filter(article => article.score > 0)
-    .sort((a, b) => b.score - a.score);
+    .filter(article => article.score > 0);
 
-  // Select top 9 with source diversity
-  const selectedArticles = [];
-  const usedSources = new Set();
+  // ❗ NEW SECTION: Deterministic daily shuffle to prevent repeats
+  const today = new Date().toISOString().substring(0, 10); // "2025-11-27"
+  let seed = [...today].reduce((a, c) => a + c.charCodeAt(0), 0);
 
-  for (const article of scoredArticles) {
-    if (selectedArticles.length >= 9) break;
-    if (!usedSources.has(article.source) || selectedArticles.length >= 5) {
-      selectedArticles.push({
-        title: article.title,
-        url: article.url
-      });
-      usedSources.add(article.source);
-    }
+  function seededRandom() {
+    seed = (seed * 9301 + 49297) % 233280;
+    return seed / 233280;
   }
 
-  // Fill remaining slots
-  for (const article of scoredArticles) {
-    if (selectedArticles.length >= 9) break;
-    if (!selectedArticles.find(a => a.url === article.url)) {
-      selectedArticles.push({
-        title: article.title,
-        url: article.url
-      });
-    }
-  }
+  const shuffled = [...scoredArticles]
+    .map(a => ({ sort: seededRandom(), value: a }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(o => o.value);
 
-  return selectedArticles.slice(0, 9);
+  // Take first 9 from shuffled array
+  const todaysNine = shuffled.slice(0, 9).map(a => ({
+    title: a.title,
+    url: a.url
+  }));
+
+  return todaysNine;
 }
+
 
 // Simple RSS parser (no external dependencies)
 function parseRSS(xml, source) {
